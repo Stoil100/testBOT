@@ -65,14 +65,10 @@ function nestingAdd(items,list,text){
 }
 
 function logFunction(list){
-    for (var childKey in list) {
-        
+    for (var childKey in list) {    
         if (typeof list[childKey] === 'object' &&
             !Array.isArray(list[childKey]) &&
             list[childKey] !== null) {
-                console.log(list.value);
-                console.log(TodoListLog);
-                console.log(list[childKey].length);
             if(typeof list[childKey].value!=='undefined'){
                 if (list[childKey].value.length > 0) {
                     var currentValues = [];
