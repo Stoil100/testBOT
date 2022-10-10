@@ -1,19 +1,27 @@
 const inputHTML = document.getElementById('input');
 const buttonHTML = document.getElementById('button');
+const responseField=document.querySelector('.place');
 const setCommand = 'боте, запомни в ';
-const logCommand = 'боте, кво запомни?'
+const logCommand = 'боте, кво запомни?';
 let rgxSet = new RegExp("^(".concat(setCommand, ") *w*"));
-let rgxLog = new RegExp("^(".concat(logCommand, ") *w*"));
+let rgxLog = new RegExp(`${logCommand}`);
+let TodoListLog=[];
 
-let TodoList={}
+console.log("боте, запомни в баба си - си да",
+"боте, кво запомни?");
+
+let TodoList={};
 let lowChanceResponseText=["да ъпгрейдна бота", "да си гледам работата!", "да спра да занимавам бота с глупости", "да си пусна новата песен на Криско"];
 
 function functionHub(){
-    if(rgxSet.test(inputHTML)){
+    if(rgxSet.test(inputHTML.value)){
         doFunction();
     }
-    else if(rgxLog.test(inputHTML)){
-        logFunction();
+    else if(rgxLog.test(inputHTML.value)){
+        logFunction(TodoList);
+    }
+    else{
+        console.error("bad idk");
     }
 }
 
@@ -34,10 +42,10 @@ function doFunction(){
         textValue=lowChanceResponseText[Math.round(Math.random()*(lowChanceResponseText.length-1))];
     }
 
-    nesting(splitValue,TodoList,textValue);
+    nestingAdd(splitValue,TodoList,textValue);
     console.log(TodoList);
 }
-function nesting(items,list,text){
+function nestingAdd(items,list,text){
     if(typeof items==='string'||items.length===0){
        if(!(Array.isArray(list.value))){
        list.value=[];
@@ -50,20 +58,36 @@ function nesting(items,list,text){
     list[`${items[0]}`]={};
     }
     let lastlist=items[0];
-   
-    
         items=items.filter((value,index)=>
             index>0
         );
-        nesting(items,list[`${lastlist}`],text);   
+        nestingAdd(items,list[`${lastlist}`],text);   
 }
 
-function logFunction(){
-    document.write(TodoList)
+function logFunction(list){
+    for (var childKey in list) {
+        
+        if (typeof list[childKey] === 'object' &&
+            !Array.isArray(list[childKey]) &&
+            list[childKey] !== null) {
+                console.log(list.value);
+                console.log(TodoListLog);
+                console.log(list[childKey].length);
+            if(typeof list[childKey].value!=='undefined'){
+                if (list[childKey].value.length > 0) {
+                    var currentValues = [];
+                    currentValues.push(`${childKey}: ${list[childKey].value}`);
+                    currentValues=currentValues.join();
+                    TodoListLog.push(currentValues);
+                }
+            }
+            logFunction(list[childKey]);
+        }
+    }
 }
 buttonHTML.onclick = functionHub;
 //боте, запомни в баба си - си да
-
+//боте, кво запомни?
 // let TodoList = {
 //     TODO: {
        
